@@ -64,12 +64,23 @@ func findPacks(remainingItems int, packets []int, order *model.Order) {
 	// Find the largest pack size that can be used.
 	largestPackSize := 0
 	for _, packSize := range packets {
-		if packSize <= remainingItems || remainingItems > packSize-remainingItems { // 251  501
+		if packSize <= remainingItems {
 			largestPackSize = packSize
 		}
 	}
 
 	if largestPackSize == 0 {
+		// If no suitable pack size is found, choose the largest pack size available that is less than or equal to the remaining items.
+		for i := len(packets) - 1; i >= 0; i-- {
+			if packets[i] <= remainingItems {
+				largestPackSize = packets[i]
+				break
+			}
+		}
+	}
+
+	if largestPackSize == 0 {
+		// If still no suitable pack size is found, choose the smallest available pack size.
 		largestPackSize = packets[0]
 	}
 

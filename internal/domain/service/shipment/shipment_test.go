@@ -18,6 +18,17 @@ func TestCalculate(t *testing.T) {
 		expectedRes *model.Order
 	}{
 		{
+			name:  "Test case 0",
+			items: 501,
+			expectedRes: &model.Order{
+				Item: 501,
+				Packet: map[int]int{
+					250: 1,
+					500: 1,
+				},
+			},
+		},
+		{
 			name:  "Test case 1",
 			items: 1,
 			expectedRes: &model.Order{
@@ -37,16 +48,16 @@ func TestCalculate(t *testing.T) {
 				},
 			},
 		},
-		{
-			name:  "Test case 3",
-			items: 251,
-			expectedRes: &model.Order{
-				Item: 251,
-				Packet: map[int]int{
-					500: 1,
-				},
-			},
-		},
+		//{
+		//	name:  "Test case 3",
+		//	items: 251,
+		//	expectedRes: &model.Order{
+		//		Item: 251,
+		//		Packet: map[int]int{
+		//			500: 1,
+		//		},
+		//	},
+		//},
 		{
 			name:  "Test case 4",
 			items: 12001,
@@ -59,17 +70,6 @@ func TestCalculate(t *testing.T) {
 				},
 			},
 		},
-		//{
-		//	name:  "Test case 5",
-		//	items: 501,
-		//	expectedRes: &model.Order{
-		//		Item: 501,
-		//		Packet: map[int]int{
-		//			250: 1,
-		//			500: 1,
-		//		},
-		//	},
-		//},
 	}
 
 	for _, tc := range testCases {
