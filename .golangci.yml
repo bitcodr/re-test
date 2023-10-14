@@ -1,0 +1,83 @@
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+  format: colored-line-number
+
+  # print lines of code with issue, default is true
+  print-issued-lines: true
+
+  # print linter name at the end of issue text, default is true
+  print-linter-name: true
+
+linters-settings:
+  misspell:
+    ignore-words:
+      - re
+
+issues:
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gomnd
+        - dupl
+        - lll
+    - path: internal/infrastructure/mock
+      linters:
+        - gomnd
+        - dupl
+    - path: errors
+      linters:
+        - gomnd
+    - path: internal/infrastructure/config
+      linters:
+        - gomnd
+        - goerr113
+
+linters:
+  # please do not use `enable-all`: it's deprecated and will be removed soon.
+  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
+  disable-all: true
+  enable:
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - funlen
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - gomnd
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - rowserrcheck
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+    - gocognit
+    - godox
+    - prealloc
+    - wsl
+    - godot
+    - nestif
+    - gomodguard
+    - asciicheck
+    - goerr113
+    - testpackage
+    - nolintlint
+    - gochecknoglobals
+
