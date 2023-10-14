@@ -32,11 +32,11 @@ func main() {
 
 	shipmentService := shipment.InitService(ctx, repo)
 
-	err = rest.InitTransport(&rest.Rest{
+	err = rest.InitTransport(ctx, &rest.Rest{
 		ShipmentService: shipmentService,
 	}, &cfg.Service)
 	if err != nil {
-		return
+		log.Fatalln(err)
 	}
 
 }

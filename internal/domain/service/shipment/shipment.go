@@ -2,6 +2,8 @@ package shipment
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"sync"
 
 	"github.com/bitcodr/re-test/internal/domain/model"
@@ -11,14 +13,14 @@ import (
 // IShipment ICrawler interface - implement packet entity methods
 // in here we can implement our domain logic without any dependency to specific databases and frameworks
 type IShipment interface {
-	Calculate(ctx context.Context, request uint) (*model.Order, error)
-	UpdatePacket(ctx context.Context, request []uint) ([]uint, error)
+	Calculate(ctx context.Context, request int) (*model.Order, error)
+	UpdatePacket(ctx context.Context, request []int) ([]int, error)
 }
 
 type shipment struct {
 	repo impl.PacketRepo
 
-	mu sync.Mutex
+	mu sync.RWMutex
 }
 
 // InitService - to initialize packet service and
@@ -30,13 +32,60 @@ func InitService(_ context.Context, repository impl.PacketRepo) IShipment {
 }
 
 // Calculate Show service - store packet logic
-func (t *shipment) Calculate(ctx context.Context, request uint) (*model.Order, error) {
+func (t *shipment) Calculate(ctx context.Context, request int) (*model.Order, error) {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
 
-	return nil, nil
+	packets, err := t.repo.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if packets == nil {
+		return nil, errors.New("there are no packets")
+	}
+
+	order := &model.Order{
+		Packet: make(map[int]int),
+	}
+
+	order.Item = request
+
+	order.Packet, _ = findPacks(request, packets)
+
+	return order, nil
+}
+
+func findPacks(remainingItems int, packets []int) (map[int]int, int) {
+	// Base case: if there are no remaining items, return an empty pack count.
+	if remainingItems == 0 {
+		return make(map[int]int), 0
+	}
+
+	bestPacks := make(map[int]int)
+	bestCount := remainingItems // Initialize with a large count.
+
+	for _, packSize := range packets {
+		if remainingItems >= packSize {
+			// Try using this pack size.
+			newCounts, newCount := findPacks(remainingItems-packSize, packets)
+			newCounts[packSize]++
+			newCount++ // Include the current pack.
+
+			if newCount < bestCount {
+				bestPacks = newCounts
+				bestCount = newCount
+			}
+		}
+	}
+	fmt.Println(bestPacks, bestCount)
+	return bestPacks, bestCount
 }
 
 // UpdatePacket Calculate Show service - store packet logic
-func (t *shipment) UpdatePacket(ctx context.Context, request []uint) ([]uint, error) {
+func (t *shipment) UpdatePacket(ctx context.Context, request []int) ([]int, error) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
 
-	return nil, nil
+	return t.repo.Update(ctx, request)
 }

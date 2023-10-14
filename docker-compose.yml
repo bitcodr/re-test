@@ -1,21 +1,20 @@
-version: "3.8"
+version: "3.9"
 services:
-
-	app:
-		container_name: re-app
-		build:
-			context: .
-			dockerfile: docker/Dockerfile
-		restart: on-failure
-		environment:
-			- SERVICE_NAME=re-app
-		ports:
-			- "8080:8080"
-		volumes:
-			- ./:/app
-		networks:
-			- backend
+  app:
+    container_name: re-test
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: on-failure
+    environment:
+      - SERVICE_NAME=re-test
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+    networks:
+      - backend
 
 networks:
-	backend:
-		driver: bridge
+  backend:
+    driver: bridge

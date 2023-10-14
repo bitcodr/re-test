@@ -1,4 +1,4 @@
-package packet
+package packet_test
 
 import (
 	"testing"
@@ -7,4 +7,3 @@ import (
 func TestInitRepo(t *testing.T) {
 
 }
-

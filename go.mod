@@ -3,7 +3,7 @@ module github.com/bitcodr/re-test
 go 1.21
 
 require (
-	github.com/fsnotify/fsnotify v1.5.1
+	github.com/fsnotify/fsnotify v1.6.0
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/testify v1.8.1
 	github.com/swaggo/swag v1.16.1
@@ -29,7 +29,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect

@@ -3,7 +3,7 @@ package packet
 import (
 	"context"
 	"errors"
-	"sync"
+	"slices"
 
 	"github.com/bitcodr/re-test/internal/infrastructure/config"
 	"github.com/bitcodr/re-test/internal/infrastructure/helper"
@@ -11,9 +11,7 @@ import (
 )
 
 type packet struct {
-	collection []uint
-
-	mu sync.RWMutex
+	collection []int
 }
 
 // InitRepo instantiate packet entity memory repository
@@ -35,18 +33,16 @@ func InitRepo(ctx context.Context, cfg *config.Connection) (impl.PacketRepo, err
 }
 
 // Get Store - store a packet in memory as a persistent layer
-func (p *packet) Get(ctx context.Context) ([]uint, error) {
-	p.mu.RLock()
-	defer p.mu.RUnlock()
-
+func (p *packet) Get(_ context.Context) ([]int, error) {
 	return p.collection, nil
 }
 
-func (p *packet) Update(_ context.Context, packets []uint) error {
-	p.mu.Lock()
-	defer p.mu.Unlock()
+func (p *packet) Update(_ context.Context, packets []int) ([]int, error) {
+	if !slices.IsSorted(packets) {
+		slices.Sort(packets)
+	}
 
 	p.collection = packets
 
-	return nil
+	return p.collection, nil
 }
