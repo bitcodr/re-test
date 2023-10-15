@@ -138,3 +138,42 @@ func TestCalculate(t *testing.T) {
 		})
 	}
 }
+
+func TestUpdatePacket(t *testing.T) {
+	testCases := []struct {
+		name        string
+		items       []int
+		expectedRes []int
+	}{
+		{
+			name:        "Test case 0",
+			items:       []int{250, 500, 1000, 2000, 5000},
+			expectedRes: []int{250, 500, 1000, 2000, 5000},
+		},
+		{
+			name:        "Test case 1",
+			items:       []int{1, 3, 4, 5, 6},
+			expectedRes: []int{1, 2, 3, 4, 5},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.TODO()
+
+			mockRepo := new(mockrepo.MockPacketRepo)
+			mockRepo.On("Update", ctx, tc.items).Return(tc.expectedRes, nil)
+
+			sh := shipment.InitService(ctx, mockRepo)
+
+			res, err := sh.UpdatePacket(ctx, tc.items)
+			if err != nil {
+				assert.Error(t, err)
+
+				return
+			}
+
+			assert.Equal(t, tc.expectedRes, res)
+		})
+	}
+}
