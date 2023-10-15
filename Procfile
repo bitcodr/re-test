@@ -1,1 +1,1 @@
-web: make release && ./bin/re-test
+web: ./re-test
