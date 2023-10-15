@@ -1,6 +1,6 @@
 # Re-Test
 
-## API Documentation
+## API Documentation to Test Online
 
 #### Update Packs
 #### API Endpoint
@@ -46,7 +46,8 @@
 }
 ```
 
-
+---
+## To test on a Local machine, follow the steps as below
 ## Prerequisites
 
 Before running any of the Makefile targets, make sure you have the following prerequisites:
