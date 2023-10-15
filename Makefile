@@ -5,25 +5,24 @@ endif
 
 SERVICE_NAME = $(shell basename "$(PWD)")
 
-ROOT = $(shell "$(PWD)")
+ROOT = $(realpath $(shell dirname $(firstword $(MAKEFILE_LIST))))
 GO ?= go
 OS = $(shell uname -s | tr A-Z a-z)
-export GOBIN = ${ROOT}bin
+export GOBIN = $(ROOT)/bin
 
 PATH := "$(PATH)":"$(GOBIN)"
 
-LINT = ${GOBIN}/golangci-lint
+LINT = "$(GOBIN)/golangci-lint"
 LINT_DOWNLOAD = curl --progress-bar -SfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s latest
 
-TPARSE = $(GOBIN)/tparse
+TPARSE = "$(GOBIN)/tparse"
 TPARSE_DOWNLOAD = $(GO) install github.com/mfridman/tparse@latest
 
-COMPILEDEAMON = ${GOBIN}/CompileDaemon
+COMPILEDEAMON = "$(GOBIN)/CompileDaemon"
 COMPILEDEAMON_DOWNLOAD = $(GO) install github.com/githubnemo/CompileDaemon@latest
 
-SWAG = ${GOBIN}/swag
+SWAG = "$(GOBIN)/swag"
 SWAG_DOWNLOAD = $(GO) install github.com/swaggo/swag/cmd/swag@latest
-
 
 .PHONY: help
 help: ## Display this help message
@@ -43,8 +42,7 @@ build:create-env ## Build development binary file
 .PHONY: run
 run:create-env ## run as development reload if code changes
 	@ test -e $(COMPILEDEAMON) || $(COMPILEDEAMON_DOWNLOAD)
-	@ chmod +x $(COMPILEDEAMON)
-	@ $(COMPILEDEAMON) --build="make build" --command="$(GOBIN)/$(SERVICE_NAME)"
+	@ $(COMPILEDEAMON) --build="make build" --command=./bin/$(SERVICE_NAME)
 
 
 .PHONY: create-env
@@ -88,7 +86,7 @@ lint: ## Lint the files
 .PHONY: docs
 docs: ## Create/Update documents using swagger tool
 	@ test -e  $(SWAG) || $(SWAG_DOWNLOAD)
-	@ swag init -g ./cmd/main.go -o ./docs --parseDependency
+	@ swag init -g ./cmd/$(SERVICE_NAME)/main.go -o ./docs --parseDependency
 
 
 .PHONY: docker-build

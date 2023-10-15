@@ -15,7 +15,7 @@ main to know about how to run a project, you can check README.md
 The structure of project is Hexagonal
 - interface -> that is rest and framework layer
 - service -> it is domain model that contains all relation business models and logic
-- repository -> that contains the source of data we have
+- repository -> that contains the source of data we have.
 */
 func main() {
 	ctx := context.Background()

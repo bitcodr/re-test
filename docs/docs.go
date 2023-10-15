@@ -46,7 +46,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Order"
+                            "$ref": "#/definitions/github_com_bitcodr_re-test_internal_domain_model.Order"
                         }
                     },
                     "400": {
@@ -129,7 +129,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Order": {
+        "github_com_bitcodr_re-test_internal_domain_model.Order": {
             "type": "object",
             "properties": {
                 "item": {
