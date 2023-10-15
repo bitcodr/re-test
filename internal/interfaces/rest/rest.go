@@ -43,7 +43,7 @@ func InitTransport(ctx context.Context, rest *Rest, config *config.Service) erro
 	}
 
 	srv := http.Server{
-		Addr:              port,
+		Addr:              ":" + port,
 		ReadHeaderTimeout: config.ReadTimeout,
 	}
 

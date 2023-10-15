@@ -91,7 +91,7 @@ func watchConfigChanges(_ context.Context, v *viper.Viper) {
 
 // setDefaultServiceConfig add default value for service in case the config.yml is empty
 func setDefaultServiceConfig(v *viper.Viper) {
-	v.SetDefault("server.port", ":8080")
+	v.SetDefault("server.port", "8080")
 	v.SetDefault("server.name", "re")
 	v.SetDefault("server.read_timeout", 30*time.Second)
 	v.SetDefault("server.write_timeout", 30*time.Second)
