@@ -27,8 +27,8 @@ vendor/
 # Mac OS X files
 .DS_Store
 
-# Environments
-config.d/.env
-
-# Config files
-config.d/config.yml
+## Environments
+#config.d/.env
+#
+## Config files
+#config.d/config.yml
