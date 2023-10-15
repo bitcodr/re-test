@@ -2,7 +2,7 @@ package shipment
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"sync"
 
 	"github.com/bitcodr/re-test/internal/domain/model"
@@ -10,7 +10,7 @@ import (
 )
 
 // IShipment ICrawler interface - implement packet entity methods
-// in here we can implement our domain logic without any dependency to specific databases and frameworks
+// in here we can implement our domain logic without any dependency to specific databases and frameworks.
 type IShipment interface {
 	Calculate(ctx context.Context, request int) (*model.Order, error)
 	UpdatePacket(ctx context.Context, request []int) ([]int, error)
@@ -23,14 +23,14 @@ type shipment struct {
 }
 
 // InitService - to initialize packet service and
-// pass the repository to it without knowing what kind of DB we are using
+// pass the repository to it without knowing what kind of DB we are using.
 func InitService(_ context.Context, repository impl.PacketRepo) IShipment {
 	return &shipment{
 		repo: repository,
 	}
 }
 
-// Calculate Show service - store packet logic
+// Calculate Show service - store packet logic.
 func (t *shipment) Calculate(ctx context.Context, request int) (*model.Order, error) {
 	t.mu.RLock()
 	defer t.mu.RUnlock()
@@ -41,7 +41,7 @@ func (t *shipment) Calculate(ctx context.Context, request int) (*model.Order, er
 	}
 
 	if packets == nil {
-		return nil, errors.New("there are no packets")
+		return nil, fmt.Errorf(" %s", "there are no packets")
 	}
 
 	order := &model.Order{
@@ -51,14 +51,13 @@ func (t *shipment) Calculate(ctx context.Context, request int) (*model.Order, er
 	order.Item = request
 
 	var sum int
+
 	findPacks(request, packets, order, &sum)
 	checkPacksEquivalent(packets, order, &sum)
 
 	return order, nil
 }
-
 func findPacks(remainingItems int, packets []int, order *model.Order, sum *int) {
-
 	// Base case: if there are no remaining items, return an empty pack count.
 	if remainingItems <= 0 {
 		return
@@ -66,6 +65,7 @@ func findPacks(remainingItems int, packets []int, order *model.Order, sum *int) 
 
 	// Find the largest pack size that can be used.
 	largestPackSize := 0
+
 	for _, packSize := range packets {
 		if packSize <= remainingItems {
 			largestPackSize = packSize
@@ -83,7 +83,7 @@ func findPacks(remainingItems int, packets []int, order *model.Order, sum *int) 
 }
 
 // checkPacksEquivalent
-// checks whether the sum of the packs can be changed to another one to reduce the number of packs
+// checks whether the sum of the packs can be changed to another one to reduce the number of packs.
 func checkPacksEquivalent(packets []int, order *model.Order, sum *int) {
 	for _, p := range packets {
 		if *sum == p {

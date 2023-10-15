@@ -16,6 +16,7 @@ func ResponseError(res http.ResponseWriter, message string, err error) {
 	res.Header().Add("Content-Type", "application/json")
 	res.WriteHeader(http.StatusInternalServerError)
 	_, err = res.Write([]byte(message))
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -34,6 +35,7 @@ func ResponseSuccess[T Success](res http.ResponseWriter, message T) {
 
 	res.Header().Add("Content-Type", "application/json")
 	res.WriteHeader(http.StatusOK)
+
 	if _, err = res.Write(data); err != nil {
 		ResponseError(res, "error in writing response", err)
 	}

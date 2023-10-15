@@ -15,7 +15,8 @@ type packet struct {
 }
 
 // InitRepo instantiate packet entity memory repository
-// with the interface we have in the impl directory we can implement another source of data and pass it to service
+// with the interface we have in the impl directory we can implement
+// another source of data and pass it to service
 // without changing anything in out domain service
 func InitRepo(ctx context.Context, cfg *config.Connection) (impl.PacketRepo, error) {
 	if cfg == nil {
@@ -32,11 +33,12 @@ func InitRepo(ctx context.Context, cfg *config.Connection) (impl.PacketRepo, err
 	}, nil
 }
 
-// Get Store - store a packet in memory as a persistent layer
+// Get Store - get packs from memory as a persistent layer
 func (p *packet) Get(_ context.Context) ([]int, error) {
 	return p.collection, nil
 }
 
+// Update packs
 func (p *packet) Update(_ context.Context, packets []int) ([]int, error) {
 	if !slices.IsSorted(packets) {
 		slices.Sort(packets)

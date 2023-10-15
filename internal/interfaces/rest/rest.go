@@ -4,15 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/bitcodr/re-test/internal/domain/model"
-	shipmentservice "github.com/bitcodr/re-test/internal/domain/service/shipment"
-	"github.com/bitcodr/re-test/internal/infrastructure/config"
-	"github.com/bitcodr/re-test/internal/infrastructure/helper"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+
+	"github.com/bitcodr/re-test/internal/domain/model"
+	shipmentservice "github.com/bitcodr/re-test/internal/domain/service/shipment"
+	"github.com/bitcodr/re-test/internal/infrastructure/config"
+	"github.com/bitcodr/re-test/internal/infrastructure/helper"
 )
 
 // Rest Service we can add all our services in here and pass it to our rest patterns
@@ -22,16 +23,16 @@ type Rest struct {
 	// register your services in the restful transport layer here
 }
 
-// InitTransport InitCommand to initialise http apis
+// InitTransport to initialise http apis
 // it is possible in a project that use multiple rest like grpc, http, commandline, etc
 func InitTransport(ctx context.Context, rest *Rest, config *config.Service) error {
-
 	http.HandleFunc("/orders/calculate", rest.Calculate)
 
 	http.HandleFunc("/packets/update", rest.UpdatePacket)
 
 	srv := http.Server{
-		Addr: config.PORT,
+		Addr:              config.PORT,
+		ReadHeaderTimeout: config.ReadTimeout,
 	}
 
 	log.Println("Server is running on port: ", config.PORT)
@@ -50,7 +51,7 @@ func InitTransport(ctx context.Context, rest *Rest, config *config.Service) erro
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	return nil
@@ -60,9 +61,19 @@ type OrderRequestDTO struct {
 	Items int `json:"items"`
 }
 
-// Calculate Show @Summary get a packet
-// @Description crawl
-// @Tags Shipment
+// Calculate order items
+//
+//	@Summary		Order Items
+//	@Description	Get correct order items
+//	@Tags			order, items, calculate
+//	@Accept			json
+//	@Produce		json
+//	@Param			items	body		int	false	"items to calculate"	minimum(1)
+//	@Success		200		{object}	model.Order
+//	@Failure		400		{string}	string	"error"
+//	@Failure		404		{string}	string	"error"
+//	@Failure		500		{string}	string	"error"
+//	@Router			/orders/calculate [post]
 func (r *Rest) Calculate(res http.ResponseWriter, req *http.Request) {
 	b, err := io.ReadAll(req.Body)
 	if err != nil {
@@ -103,6 +114,19 @@ type UpdatePacketRequestDTO struct {
 	Packets []int `json:"packets"`
 }
 
+// UpdatePacket update available packs
+//
+//	@Summary		update packs
+//	@Description	update available packs for order
+//	@Tags			order, items, update
+//	@Accept			json
+//	@Produce		json
+//	@Param			items	body		array	false	"name search by q"	Format(email)
+//	@Success		200		{array}		int
+//	@Failure		400		{string}	string	"error"
+//	@Failure		404		{string}	string	"error"
+//	@Failure		500		{string}	string	"error"
+//	@Router			/packets/update [post]
 func (r *Rest) UpdatePacket(res http.ResponseWriter, req *http.Request) {
 	b, err := io.ReadAll(req.Body)
 	if err != nil {

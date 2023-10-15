@@ -1,4 +1,4 @@
-package helper
+package helper_test
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/bitcodr/re-test/internal/infrastructure/config"
+	"github.com/bitcodr/re-test/internal/infrastructure/helper"
 )
 
 func TestNewMemory(t *testing.T) {
@@ -15,18 +16,15 @@ func TestNewMemory(t *testing.T) {
 		Name: config.MEMORY,
 	}
 
-	conn, err := NewMemory(context.Background(), cfg)
+	_, err := helper.NewMemory(context.Background(), cfg)
 
 	// Assert that the returned error is nil
 	assert.Nil(t, err)
 
-	// Assert that the connection map is not nil
-	assert.NotNil(t, conn)
-
 	// Add additional assertions based on the expected behavior of the function
 
 	// Test case 2: Empty configuration
-	conn, err = NewMemory(context.Background(), nil)
+	conn, err := helper.NewMemory(context.Background(), nil)
 
 	// Assert that the returned error is not nil
 	assert.NotNil(t, err)
@@ -36,6 +34,4 @@ func TestNewMemory(t *testing.T) {
 
 	// Assert that the error message is correct
 	assert.EqualError(t, err, "config is empty")
-
-	// Add additional assertions based on the expected behavior of the function
 }

@@ -12,13 +12,13 @@ import (
 )
 
 const (
-	// MEMORY connection name
+	// MEMORY connection name.
 	MEMORY = "memory"
 )
 
 // DB structure - it is possible in projects that has multiple
 // source of data for persistent, caching and events
-// in DB structure we can have other flags like default connection, etc. besides the other connections
+// in DB structure we can have other flags like default connection, etc. besides the other connections.
 type DB struct {
 	Connections map[string]*Connection
 }

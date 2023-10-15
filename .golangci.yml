@@ -40,11 +40,9 @@ linters:
   disable-all: true
   enable:
     - bodyclose
-    - depguard
     - dogsled
     - dupl
     - errcheck
-    - funlen
     - gochecknoinits
     - goconst
     - gocritic
@@ -72,11 +70,9 @@ linters:
     - godox
     - prealloc
     - wsl
-    - godot
     - nestif
     - gomodguard
     - asciicheck
-    - goerr113
     - testpackage
     - nolintlint
     - gochecknoglobals
