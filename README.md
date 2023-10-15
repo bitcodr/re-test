@@ -1,5 +1,52 @@
 # Re-Test
 
+## API Documentation
+
+#### Update Packs
+#### API Endpoint
+- **API:** [https://stormy-stream-88610-e6c05773897c.herokuapp.com/packets/update](https://stormy-stream-88610-e6c05773897c.herokuapp.com/packets/update)
+
+#### Request
+```json
+{
+    "packets": [250, 500, 1000, 2000, 5000]
+}
+```
+
+#### Response
+```json
+[
+    250,
+    500,
+    1000,
+    2000,
+    5000
+]
+```
+
+#### Calculate Order Packs
+
+#### API Endpoint
+- **API:** [https://stormy-stream-88610-e6c05773897c.herokuapp.com/orders/calculate](https://stormy-stream-88610-e6c05773897c.herokuapp.com/orders/calculate)
+
+#### Request
+```json
+{
+    "items": 251
+}
+```
+
+#### Response
+```json
+{
+    "item": 251,
+    "packets": {
+        "500": 1
+    }
+}
+```
+
+
 ## Prerequisites
 
 Before running any of the Makefile targets, make sure you have the following prerequisites:
