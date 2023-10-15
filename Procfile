@@ -1,1 +1,1 @@
-web: ./re-test
+web: re-test
