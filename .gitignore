@@ -28,7 +28,7 @@ vendor/
 .DS_Store
 
 # Environments
-config.d/.env
-
-# Config files
-config.d/config.yml
+#config.d/.env
+#
+## Config files
+#config.d/config.yml
