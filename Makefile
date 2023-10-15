@@ -3,7 +3,6 @@ ifneq ("$(wildcard $(./config.d/.env))","")
 	export $(shell sed 's/=.*//' ./config.d/.env)
 endif
 
-
 SERVICE_NAME = $(shell basename "$(PWD)")
 
 ROOT = $(shell "$(PWD)")
@@ -17,13 +16,13 @@ LINT = ${GOBIN}/golangci-lint
 LINT_DOWNLOAD = curl --progress-bar -SfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s latest
 
 TPARSE = $(GOBIN)/tparse
-TPARSE_DOWNLOAD = $(GO) get -u github.com/mfridman/tparse
+TPARSE_DOWNLOAD = $(GO) install github.com/mfridman/tparse@latest
 
 COMPILEDEAMON = ${GOBIN}/CompileDaemon
-COMPILEDEAMON_DOWNLOAD = $(GO) get -u github.com/githubnemo/CompileDaemon
+COMPILEDEAMON_DOWNLOAD = $(GO) install github.com/githubnemo/CompileDaemon@latest
 
 SWAG = ${GOBIN}/swag
-SWAG_DOWNLOAD = $(GO) get -u github.com/swaggo/swag/cmd/swag
+SWAG_DOWNLOAD = $(GO) install github.com/swaggo/swag/cmd/swag@latest
 
 
 .PHONY: help
