@@ -26,13 +26,6 @@ type Rest struct {
 // InitTransport to initialise http apis
 // it is possible in a project that use multiple rest like grpc, http, commandline, etc
 func InitTransport(ctx context.Context, rest *Rest, config *config.Service) error {
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		_, err := io.WriteString(w, "Hello, world!\n")
-		if err != nil {
-			log.Fatalln(err)
-		}
-	})
-
 	http.HandleFunc("/orders/calculate", rest.Calculate)
 
 	http.HandleFunc("/packets/update", rest.UpdatePacket)
