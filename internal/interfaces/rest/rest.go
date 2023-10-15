@@ -30,12 +30,17 @@ func InitTransport(ctx context.Context, rest *Rest, config *config.Service) erro
 
 	http.HandleFunc("/packets/update", rest.UpdatePacket)
 
+	port, exists := os.LookupEnv("PORT")
+	if !exists {
+		port = config.PORT
+	}
+
 	srv := http.Server{
-		Addr:              config.PORT,
+		Addr:              port,
 		ReadHeaderTimeout: config.ReadTimeout,
 	}
 
-	log.Println("Server is running on port: ", config.PORT)
+	log.Println("Server is running on port: ", port)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
