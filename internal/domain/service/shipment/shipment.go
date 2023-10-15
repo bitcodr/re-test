@@ -50,12 +50,15 @@ func (t *shipment) Calculate(ctx context.Context, request int) (*model.Order, er
 
 	order.Item = request
 
-	findPacks(request, packets, order)
+	var sum int
+	findPacks(request, packets, order, &sum)
+	checkPacksEquivalent(packets, order, &sum)
 
 	return order, nil
 }
 
-func findPacks(remainingItems int, packets []int, order *model.Order) {
+func findPacks(remainingItems int, packets []int, order *model.Order, sum *int) {
+
 	// Base case: if there are no remaining items, return an empty pack count.
 	if remainingItems <= 0 {
 		return
@@ -70,22 +73,24 @@ func findPacks(remainingItems int, packets []int, order *model.Order) {
 	}
 
 	if largestPackSize == 0 {
-		// If no suitable pack size is found, choose the largest pack size available that is less than or equal to the remaining items.
-		for i := len(packets) - 1; i >= 0; i-- {
-			if packets[i] <= remainingItems {
-				largestPackSize = packets[i]
-				break
-			}
-		}
-	}
-
-	if largestPackSize == 0 {
 		// If still no suitable pack size is found, choose the smallest available pack size.
 		largestPackSize = packets[0]
 	}
 
 	order.Packet[largestPackSize]++
-	findPacks(remainingItems-largestPackSize, packets, order)
+	*sum += largestPackSize
+	findPacks(remainingItems-largestPackSize, packets, order, sum)
+}
+
+// checkPacksEquivalent
+// checks whether the sum of the packs can be changed to another one to reduce the number of packs
+func checkPacksEquivalent(packets []int, order *model.Order, sum *int) {
+	for _, p := range packets {
+		if *sum == p {
+			order.Packet = map[int]int{p: 1}
+			break
+		}
+	}
 }
 
 // UpdatePacket Calculate Show service - store packet logic

@@ -48,16 +48,16 @@ func TestCalculate(t *testing.T) {
 				},
 			},
 		},
-		//{
-		//	name:  "Test case 3",
-		//	items: 251,
-		//	expectedRes: &model.Order{
-		//		Item: 251,
-		//		Packet: map[int]int{
-		//			500: 1,
-		//		},
-		//	},
-		//},
+		{
+			name:  "Test case 3",
+			items: 251,
+			expectedRes: &model.Order{
+				Item: 251,
+				Packet: map[int]int{
+					500: 1,
+				},
+			},
+		},
 		{
 			name:  "Test case 4",
 			items: 12001,
@@ -70,6 +70,49 @@ func TestCalculate(t *testing.T) {
 				},
 			},
 		},
+		{
+			name:  "Test case 5",
+			items: 750,
+			expectedRes: &model.Order{
+				Item: 750,
+				Packet: map[int]int{
+					500: 1,
+					250: 1,
+				},
+			},
+		},
+		{
+			name:  "Test case 6",
+			items: 751,
+			expectedRes: &model.Order{
+				Item: 751,
+				Packet: map[int]int{
+					1000: 1,
+				},
+			},
+		},
+		{
+			name:  "Test case 7",
+			items: 111,
+			expectedRes: &model.Order{
+				Item: 111,
+				Packet: map[int]int{
+					250: 1,
+				},
+			},
+		},
+		{
+			name:  "Test case 8",
+			items: 3455,
+			expectedRes: &model.Order{
+				Item: 3455,
+				Packet: map[int]int{
+					250:  2,
+					1000: 1,
+					2000: 1,
+				},
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -77,7 +120,9 @@ func TestCalculate(t *testing.T) {
 			ctx := context.TODO()
 
 			mockRepo := new(mockrepo.MockPacketRepo)
-			mockRepo.On("Update", ctx, []int{250, 500, 1000, 2000, 5000}).Return([]int{250, 500, 1000, 2000, 5000}, nil)
+			mockRepo.On("Update", ctx, []int{250, 500, 1000, 2000, 5000}).Return(
+				[]int{250, 500, 1000, 2000, 5000}, nil,
+			)
 			mockRepo.On("Get", ctx).Return([]int{250, 500, 1000, 2000, 5000}, nil)
 
 			sh := shipment.InitService(ctx, mockRepo)
