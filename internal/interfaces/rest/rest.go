@@ -30,8 +30,8 @@ func InitTransport(ctx context.Context, rest *Rest, config *config.Service) erro
 
 	http.HandleFunc("/packets/update", rest.UpdatePacket)
 
-	port, exists := os.LookupEnv("PORT")
-	if !exists {
+	port := os.Getenv("PORT")
+	if port == "" {
 		port = config.PORT
 	}
 
